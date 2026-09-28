@@ -1,24 +1,9 @@
-'use client';
-
-import { useMemo } from 'react';
-import { AgGridReact } from 'ag-grid-react';
-import {
-    ColDef,
-    themeQuartz,
-    ModuleRegistry,
-    PaginationModule,
-    RowSelectionModule,
-    AllCommunityModule,
-} from 'ag-grid-community';
-
-import { Button, Space, Popconfirm, Tag } from 'antd';
-import {
-    EditOutlined,
-    DeleteOutlined,
-} from '@ant-design/icons';
-
-import { formatDateVN } from '@/utils/day.util';
-import type { DepartmentResponseDto } from '@/interfaces/department.interface';
+import { JobTitleResponseDto } from "@/interfaces/jobtitle.interface";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { AllCommunityModule, ColDef, ModuleRegistry, PaginationModule, RowSelectionModule, themeQuartz } from "ag-grid-community";
+import { AgGridReact } from "ag-grid-react";
+import { Button, Popconfirm, Space, Tag } from "antd";
+import { useMemo } from "react";
 
 ModuleRegistry.registerModules([
     PaginationModule,
@@ -26,21 +11,18 @@ ModuleRegistry.registerModules([
     AllCommunityModule,
 ]);
 
-interface DepartmentGridProps {
-    departments: DepartmentResponseDto[];
-    loading: boolean;
-    onEditDepartment: (record: DepartmentResponseDto) => void;
-    onDeleteDepartment: (id: number) => void;
+
+interface JobTitleGridProps {
+    jobtitles: JobTitleResponseDto[],
+    loading: boolean,
+    onEditJobtitle: (record: JobTitleResponseDto) => void,
+    onDeleteJobTitle: (id: number) => void,
 }
 
-export default function DepartmentGrid({
-    departments,
-    loading,
-    onEditDepartment,
-    onDeleteDepartment,
-}: DepartmentGridProps) {
 
-    const columnDefs = useMemo<ColDef<DepartmentResponseDto>[]>(
+const JobTitleGrid = ({ jobtitles, loading, onEditJobtitle, onDeleteJobTitle }: JobTitleGridProps) => {
+
+    const ColumnDefs = useMemo<ColDef<JobTitleResponseDto>[]>(
         () => [
             {
                 headerName: 'STT',
@@ -55,47 +37,28 @@ export default function DepartmentGrid({
             },
 
             {
-                field: 'code',
-                headerName: 'Mã phòng ban',
+                field: 'titleName',
+                headerName: 'Tên chức danh',
                 filter: true,
                 sortable: true,
                 width: 160,
             },
 
             {
-                field: 'name',
-                headerName: 'Tên phòng ban',
+                field: 'level',
+                headerName: 'Cấp bậc',
                 filter: true,
                 sortable: true,
                 flex: 1,
                 minWidth: 180,
             },
-
-            {
-                field: 'managerName',
-                headerName: 'Tên Trưởng phòng',
-                filter: true,
-                sortable: true,
-                flex: 1.5,
-                minWidth: 200,
-            },
-
-            {
-                field: 'totalEmployees',
-                headerName: 'Số lượng nhân viên',
-                filter: true,
-                sortable: true,
-                flex: 1.5,
-                minWidth: 200,
-            },
-
             {
                 field: 'isActive',
                 headerName: 'Trạng thái',
                 filter: true,
                 sortable: true,
-                flex: 1.5,
-                minWidth: 200,
+                flex: 1,
+                minWidth: 180,
 
                 cellRenderer: (params: any) => {
                     const isActive = params.value;
@@ -115,18 +78,6 @@ export default function DepartmentGrid({
                     );
                 },
             },
-
-            {
-                field: 'createdAt',
-                headerName: 'Ngày tạo',
-                width: 180,
-                sortable: true,
-                valueFormatter: (params) =>
-                    params.value
-                        ? formatDateVN(params.value)
-                        : '',
-            },
-
             {
                 headerName: 'Thao tác',
                 width: 140,
@@ -136,7 +87,7 @@ export default function DepartmentGrid({
 
                 cellRenderer: (params: any) => {
                     const record =
-                        params.data as DepartmentResponseDto;
+                        params.data as JobTitleResponseDto;
 
                     if (!record) {
                         return null;
@@ -154,7 +105,7 @@ export default function DepartmentGrid({
                                         }}
                                     />
                                 }
-                                onClick={() => onEditDepartment(record)}
+                                onClick={() => onEditJobtitle(record)}
                             />
 
                             {/* DELETE */}
@@ -162,7 +113,7 @@ export default function DepartmentGrid({
                                 title="Xác nhận xóa"
                                 description="Bạn có chắc chắn muốn xóa phòng ban này?"
                                 onConfirm={() =>
-                                    onDeleteDepartment(record.id)
+                                    onDeleteJobTitle(record.id)
                                 }
                                 okText="Xóa"
                                 cancelText="Hủy"
@@ -180,9 +131,11 @@ export default function DepartmentGrid({
                     );
                 },
             },
+
         ],
-        [onEditDepartment, onDeleteDepartment]
+        [onEditJobtitle, onDeleteJobTitle],
     );
+
 
     return (
         <div
@@ -191,9 +144,9 @@ export default function DepartmentGrid({
                 height: 500,
             }}
         >
-            <AgGridReact<DepartmentResponseDto>
-                rowData={departments}
-                columnDefs={columnDefs}
+            <AgGridReact<JobTitleResponseDto>
+                rowData={jobtitles}
+                columnDefs={ColumnDefs}
 
                 /* AG Grid 36 Theme API */
                 theme={themeQuartz}
@@ -220,5 +173,7 @@ export default function DepartmentGrid({
                 }}
             />
         </div>
+
     );
 }
+export default JobTitleGrid;

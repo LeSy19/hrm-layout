@@ -77,6 +77,7 @@ export default function DepartmentDrawer({
                 code: editingDepartment.code,
                 name: editingDepartment.name,
                 managerId: editingDepartment.managerId ?? undefined,
+                isActive: editingDepartment.isActive,
             });
         }
         // CREATE
@@ -246,6 +247,30 @@ export default function DepartmentDrawer({
                         listHeight={200}
                     />
                 </Form.Item>
+                {editingDepartment && (
+                    <Form.Item
+                        name="isActive"
+                        label={
+                            <span className="font-medium">
+                                Trạng thái
+                            </span>
+                        }
+                    >
+                        <Select
+                            size="large"
+                            options={[
+                                {
+                                    value: true,
+                                    label: 'Đang hoạt động',
+                                },
+                                {
+                                    value: false,
+                                    label: 'Ngưng hoạt động',
+                                },
+                            ]}
+                        />
+                    </Form.Item>
+                )}
             </Form>
         </Drawer>
     );

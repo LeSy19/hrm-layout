@@ -28,7 +28,7 @@ export const jobtitleService = {
     },
 
     async updateJobTitle(id: number, data: UpdateJobTitleDto): Promise<JobTitleResponseDto> {
-        const response = await axiosClient.post<JobTitleResponseDto>(EndPoint.JobTitles.updateJobTitle(id), data);
+        const response = await axiosClient.put<JobTitleResponseDto>(EndPoint.JobTitles.updateJobTitle(id), data);
         return response.data;
     },
 

@@ -9,6 +9,7 @@ import {
     TeamOutlined,
     MenuFoldOutlined,
     MenuUnfoldOutlined,
+    IdcardOutlined,
 } from '@ant-design/icons';
 
 import { useRouter, usePathname } from 'next/navigation';
@@ -58,6 +59,18 @@ export const AppSidebar: React.FC = () => {
                 </Tooltip>
             ),
             label: 'Nhân viên',
+        },
+        {
+            key: APP_ROUTES.JOBTITLES,
+            icon: (
+                <Tooltip
+                    title={collapsed ? 'Vị trí công việc' : ''}
+                    placement="right"
+                >
+                    <IdcardOutlined />
+                </Tooltip>
+            ),
+            label: 'Vị trí công việc',
         },
     ];
 

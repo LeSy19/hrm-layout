@@ -1,24 +1,24 @@
-'use client';
+'use client'
 
-interface DepartmentHeaderProps {
-    searchTerm: string;
-    onSearchChange: (value: string) => void;
-    onOpenCreateDrawer: () => void;
+interface JobTitleHeaderProps {
+    searchTerm: string,
+    onSearchChange: (value: string) => void,
+    onOpenJobTitleDrawer: () => void,
 }
 
-export default function DepartmentHeader({ searchTerm, onSearchChange, onOpenCreateDrawer }: DepartmentHeaderProps) {
+const JobTitleHeader = ({ searchTerm, onSearchChange, onOpenJobTitleDrawer }: JobTitleHeaderProps) => {
     return (
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
             <div>
-                <h1 className="text-2xl font-bold text-gray-800">Quản lý Phòng ban</h1>
-                <p className="text-sm text-gray-500">Danh sách và thông tin phòng ban trong hệ thống</p>
+                <h1 className="text-2xl font-bold text-gray-800">Quản lý Chức Danh</h1>
+                <p className="text-sm text-gray-500">Danh sách và thông tin vị trí công việc trong hệ thống</p>
             </div>
 
             <div className="flex items-center gap-3">
                 {/* Ô Tìm kiếm */}
                 <input
                     type="text"
-                    placeholder="Tìm tên phòng ban, mã phòng ban"
+                    placeholder="Tìm tên chức danh, mã chức danh"
                     value={searchTerm}
                     onChange={(e) => onSearchChange(e.target.value)}
                     className="px-3 py-2 border border-gray-300 rounded-lg text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -26,12 +26,13 @@ export default function DepartmentHeader({ searchTerm, onSearchChange, onOpenCre
 
                 {/* Nút Thêm mới */}
                 <button
-                    onClick={onOpenCreateDrawer}
+                    onClick={onOpenJobTitleDrawer}
                     className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
                 >
-                    + Thêm phòng ban
+                    + Thêm chức danh
                 </button>
             </div>
         </div>
-    );
+    )
 }
+export default JobTitleHeader;

@@ -16,6 +16,7 @@ export interface JobTitleResponseDto {
 export interface CreateJobTitleDto {
     titleName: string;
     level: string;
+    isActive: true;
 }
 
 export interface UpdateJobTitleDto {

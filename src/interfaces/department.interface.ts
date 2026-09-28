@@ -12,6 +12,7 @@ export interface DepartmentResponseDto {
     managerId: number | null;
     managerName: string | null;
     totalEmployees: number;
+    isActive: boolean;
     createdAt: string;
 }
 
@@ -19,10 +20,12 @@ export interface CreateDepartmentDto {
     code: string;
     name: string;
     managerId: number | null;
+    isActive: true;
 }
 
 export interface UpdateDepartmentDto {
     code: string;
     name: string;
     managerId: number | null;
+    isActive: boolean;
 }
