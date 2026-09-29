@@ -10,6 +10,7 @@ import {
     MenuFoldOutlined,
     MenuUnfoldOutlined,
     IdcardOutlined,
+    CalculatorFilled,
 } from '@ant-design/icons';
 
 import { useRouter, usePathname } from 'next/navigation';
@@ -71,6 +72,18 @@ export const AppSidebar: React.FC = () => {
                 </Tooltip>
             ),
             label: 'Vị trí công việc',
+        },
+        {
+            key: APP_ROUTES.LEAVETYPES,
+            icon: (
+                <Tooltip
+                    title={collapsed ? 'Loại nghỉ phép' : ''}
+                    placement="right"
+                >
+                    <CalculatorFilled />
+                </Tooltip>
+            ),
+            label: 'Loại nghỉ phép',
         },
     ];
 

@@ -4,5 +4,6 @@ export const APP_ROUTES = {
     LOGIN: '/auth/login',
     DEPARTMENT: '/pages/departments',
     EMPLOYEES: '/pages/employees',
-    JOBTITLES: '/pages/jobtitles'
+    JOBTITLES: '/pages/jobtitles',
+    LEAVETYPES: '/pages/leavetypes'
 };

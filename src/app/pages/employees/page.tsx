@@ -73,6 +73,7 @@ export default function EmployeesPage() {
             <div className="p-4 max-w-345 mx-auto">
                 <EmployeeHeader
                     searchTerm={searchTerm}
+                    onRefresh={loadEmployees}
                     onSearchChange={(val) => {
                         setSearchTerm(val);
                         setPageIndex(1);

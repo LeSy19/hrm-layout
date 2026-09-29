@@ -1,103 +1,95 @@
 'use client'
 
 import MainLayout from "@/app/layouts/MainLayout";
-import JobTitleDrawer from "@/app/pages/jobtitles/components/JobTitleDrawer";
-import JobTitleGrid from "@/app/pages/jobtitles/components/JobTitleGrid";
-import JobTitleHeader from "@/app/pages/jobtitles/components/JobTitleHeader";
-import { CreateJobTitleDto, JobTitleResponseDto, UpdateJobTitleDto } from "@/interfaces/jobtitle.interface";
+import LeaveTypeDrawer from "@/app/pages/leavetypes/components/LeaveTypeDrawer";
+import LeaveTypeGrid from "@/app/pages/leavetypes/components/LeaveTypeGrid";
+import LeaveTypeHeader from "@/app/pages/leavetypes/components/LeaveTypeHeader";
+import { CreateLeaveTypeDto, LeaveTypeResponseDto, UpdateLeaveTypeDto } from "@/interfaces/leavetype.interface";
 import { PaginatedResult } from "@/interfaces/pagination.interface";
-import { jobtitleService } from "@/service/jobtitle.service";
+import { leavetypeService } from "@/service/leavetype.service";
 import { message, Pagination } from "antd";
 import { useCallback, useEffect, useState } from "react";
 
-const JobTitlePage = () => {
+const LeaveTypePage = () => {
 
-    const [data, setData] = useState<PaginatedResult<JobTitleResponseDto> | null>(null);
+    const [data, setData] =
+        useState<PaginatedResult<LeaveTypeResponseDto> | null>(null);
     const [loading, setLoading] = useState(true);
     // Drawer states
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-    const [selectedJobTitle, setSelectedJobTitle] = useState<JobTitleResponseDto | null>(null);
+    const [selectedLeaveType, setSelectedLeaveType] = useState<LeaveTypeResponseDto | null>(null);
 
     // States bộ lọc
     const [pageIndex, setPageIndex] = useState(1);
     const [pageSize, setPageSize] = useState(10);
-    const [searchTerm, setSearchTerm] = useState("");
 
-    //Lấy dữ liệu danh sách jobtitles
-    const fetchJobTiles = useCallback(async () => {
+    //Lay danh sach nghi phep
+    const fetchLeaveTypes = useCallback(async () => {
         try {
             setLoading(true);
-            const result: any = await jobtitleService.GetAllJobTitle({ pageIndex, pageSize, searchTerm });
-            // Bắt mọi trường hợp trả về dữ liệu (có hoặc không có bọc .data)
-            const paginatedData = result?.data || result;
+            const result = await leavetypeService.getAllLeaveTypes({ pageIndex, pageSize });
 
-            setData(paginatedData);
+            setData(result);
 
         } catch (error) {
-            message.error('Không thể tải danh sách phòng ban!');
+            message.error('Không thể tải danh sách loại phép!');
         } finally {
             setLoading(false);
         }
-    }, [pageIndex, pageSize, searchTerm])
-
+    }, [pageIndex, pageSize])
 
     useEffect(() => {
-        fetchJobTiles();
-    }, [fetchJobTiles]);
+        fetchLeaveTypes();
+    }, [fetchLeaveTypes])
 
     //Lưu thông tin form
-    const handleSubmitDrawerJobTitle = async (formData: CreateJobTitleDto | UpdateJobTitleDto) => {
+    const handleSubmitDrawerLeaveType = async (formData: CreateLeaveTypeDto | UpdateLeaveTypeDto) => {
         try {
-            if (selectedJobTitle) {
-                await jobtitleService.updateJobTitle(selectedJobTitle.id, formData as UpdateJobTitleDto);
-                message.success('Cập nhật chức danh thành công!');
+            if (selectedLeaveType) {
+                await leavetypeService.updateLeaveType(selectedLeaveType.id, formData as UpdateLeaveTypeDto);
+                message.success('Cập nhật loại phép thành công!');
             } else {
-                await jobtitleService.createJobTitle(formData as CreateJobTitleDto);
-                message.success('Thêm mới chức danh thành công!');
+                await leavetypeService.createLeaveType(formData as CreateLeaveTypeDto);
+                message.success('Thêm mới loại phép thành công!');
             }
             setIsDrawerOpen(false);
-            fetchJobTiles();
+            fetchLeaveTypes();
         } catch (err: any) {
             message.error(err?.response?.data?.message || 'Có lỗi xảy ra!');
         }
     }
 
-
-    //Xoá jobtitle
+    //Xoá 
     const handleDelete = async (id: number) => {
         try {
-            await jobtitleService.deleteJobTitle(id);
-            message.success("Xoá chức danh thành công!");
-            fetchJobTiles();
+            await leavetypeService.deleteLeaveType(id);
+            message.success("Xoá loại phép thành công!");
+            fetchLeaveTypes();
         } catch (error) {
-            message.error('Không thể xóa chức danh này!');
+            message.error('Không thể xóa loại phép này!');
         }
     }
+
 
     return (
         <MainLayout>
             <div className="p-4 max-w-365 mx-auto">
-                <JobTitleHeader
-                    searchTerm={searchTerm}
-                    onSearchChange={(val) => {
-                        setSearchTerm(val);
-                        setPageIndex(1);
-                    }}
-                    onRefresh={fetchJobTiles}
-                    onOpenJobTitleDrawer={() => {
-                        setSelectedJobTitle(null);
+                <LeaveTypeHeader
+                    onRefresh={fetchLeaveTypes}
+                    onOpenLeaveTypeDrawer={() => {
+                        setSelectedLeaveType(null);
                         setIsDrawerOpen(true);
                     }}
                 />
 
-                <JobTitleGrid
-                    jobtitles={data?.items || []}
+                <LeaveTypeGrid
+                    leavetypes={data?.items || []}
                     loading={loading}
-                    onEditJobtitle={(jobtitle) => {
-                        setSelectedJobTitle(jobtitle);
+                    onEditingLeaveType={(leavetype) => {
+                        setSelectedLeaveType(leavetype);
                         setIsDrawerOpen(true);
                     }}
-                    onDeleteJobTitle={handleDelete}
+                    onDeleteLeaveType={handleDelete}
                 />
 
                 {data && (
@@ -175,15 +167,15 @@ const JobTitlePage = () => {
                     </div>
                 )}
 
-                <JobTitleDrawer
+                <LeaveTypeDrawer
                     isOpen={isDrawerOpen}
                     onClose={() => setIsDrawerOpen(false)}
-                    onSubmitJobTitle={handleSubmitDrawerJobTitle}
-                    editingJobTitle={selectedJobTitle}
+                    onSubmitLeaveType={handleSubmitDrawerLeaveType}
+                    editingLeaveType={selectedLeaveType}
                 />
             </div>
         </MainLayout>
     );
-}
+};
 
-export default JobTitlePage;
+export default LeaveTypePage;

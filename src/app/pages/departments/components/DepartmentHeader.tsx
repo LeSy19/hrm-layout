@@ -2,11 +2,12 @@
 
 interface DepartmentHeaderProps {
     searchTerm: string;
+    onRefresh: () => void,
     onSearchChange: (value: string) => void;
     onOpenCreateDrawer: () => void;
 }
 
-export default function DepartmentHeader({ searchTerm, onSearchChange, onOpenCreateDrawer }: DepartmentHeaderProps) {
+export default function DepartmentHeader({ searchTerm, onRefresh, onSearchChange, onOpenCreateDrawer }: DepartmentHeaderProps) {
     return (
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
             <div>
@@ -23,6 +24,14 @@ export default function DepartmentHeader({ searchTerm, onSearchChange, onOpenCre
                     onChange={(e) => onSearchChange(e.target.value)}
                     className="px-3 py-2 border border-gray-300 rounded-lg text-sm w-64 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
+
+                {/* Nút Refresh */}
+                <button
+                    onClick={onRefresh}
+                    className="flex items-center gap-2 border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+                >
+                    ↻ Refresh
+                </button>
 
                 {/* Nút Thêm mới */}
                 <button

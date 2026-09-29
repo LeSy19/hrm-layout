@@ -23,5 +23,11 @@ export const EndPoint = {
     },
     LeaveBalances: "/leavebalances",
     LeaveRequests: "/leaverequests",
-    LeaveTypes: "/leavetypes",
+    LeaveTypes: {
+        GetAllLeaveTypes: "/leavetypes",
+        GetLeaveTypeById: (id: number) => `/leavetypes/${id}`,
+        createLeaveType: "/leavetypes",
+        updateLeaveType: (id: number) => `/leavetypes/${id}`,
+        deleteLeaveType: (id: number) => `/leavetypes/${id}`,
+    }
 } as const

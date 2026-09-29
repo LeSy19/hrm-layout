@@ -85,6 +85,7 @@ export default function DepartmentPage() {
             <div className="p-4 max-w-365 mx-auto">
                 <DepartmentHeader
                     searchTerm={searchTerm}
+                    onRefresh={fetchDepartments}
                     onSearchChange={(val) => {
                         setSearchTerm(val);
                         setPageIndex(1);
