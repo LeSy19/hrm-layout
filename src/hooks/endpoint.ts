@@ -21,7 +21,13 @@ export const EndPoint = {
         updateJobTitle: (id: number) => `/jobtitles/${id}`,
         deleteJobTitle: (id: number) => `/jobtitles/${id}`,
     },
-    LeaveBalances: "/leavebalances",
+    LeaveBalances: {
+        GetMyBalance: "/leavebalances/my-balance",
+        GetAllBalances: "/leavebalances",
+        AssignLeaveBalance: "/leavebalances/assign",
+        BulkAssignLeaveBalance: "leavebalances/bulk-assign",
+
+    },
     LeaveRequests: "/leaverequests",
     LeaveTypes: {
         GetAllLeaveTypes: "/leavetypes",

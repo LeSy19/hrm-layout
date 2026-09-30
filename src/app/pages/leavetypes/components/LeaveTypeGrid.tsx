@@ -1,7 +1,6 @@
 'use client'
 
 import { LeaveTypeResponseDto } from "@/interfaces/leavetype.interface";
-import { PaginatedResult } from "@/interfaces/pagination.interface";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { AllCommunityModule, ColDef, ModuleRegistry, PaginationModule, RowSelectionModule, themeQuartz } from "ag-grid-community";
 import { AgGridReact } from "ag-grid-react";

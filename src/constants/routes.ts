@@ -5,5 +5,6 @@ export const APP_ROUTES = {
     DEPARTMENT: '/pages/departments',
     EMPLOYEES: '/pages/employees',
     JOBTITLES: '/pages/jobtitles',
-    LEAVETYPES: '/pages/leavetypes'
+    LEAVETYPES: '/pages/leavetypes',
+    LEAVEBALANCES: '/pages/leavebalances'
 };

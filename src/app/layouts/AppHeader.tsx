@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     Layout,
     Dropdown,
@@ -20,6 +20,7 @@ import {
 
 import type { MenuProps } from 'antd';
 import { useAuth } from '@/hooks/useAuth';
+import { getCurrentUser, UserInfo } from '@/utils/auth.util';
 
 const { Header } = Layout;
 const { Text } = Typography;
@@ -27,20 +28,32 @@ const { Text } = Typography;
 export const AppHeader: React.FC = () => {
     const { logout } = useAuth();
 
-    const currentUser =
-        typeof window !== 'undefined'
-            ? JSON.parse(localStorage.getItem('user_info') || '{}')
-            : {};
+    // =========================
+    // USER STATE
+    // =========================
 
-    const userName =
-        currentUser?.fullName ||
-        currentUser?.username ||
-        'Admin User';
+    const [user, setUser] = useState<UserInfo | null>(null);
+    const [mounted, setMounted] = useState(false);
 
-    const userRole =
-        currentUser?.roleName ||
-        currentUser?.role?.name ||
-        'Administrator';
+    // Chỉ đọc localStorage sau khi component đã mount ở browser
+    useEffect(() => {
+        const currentUser = getCurrentUser();
+
+        setUser(currentUser);
+        setMounted(true);
+    }, []);
+
+    // =========================
+    // USER INFORMATION
+    // =========================
+
+    const userName = mounted
+        ? user?.username || 'Người dùng'
+        : '';
+
+    const userRole = mounted
+        ? user?.roleName || ''
+        : '';
 
     // =========================
     // USER DROPDOWN
@@ -130,7 +143,9 @@ export const AppHeader: React.FC = () => {
                     gap: 18,
                 }}
             >
-                {/* Notification */}
+                {/* =========================
+                    NOTIFICATION
+                ========================= */}
 
                 <div
                     className="header-icon-button"
@@ -163,7 +178,9 @@ export const AppHeader: React.FC = () => {
                     </Badge>
                 </div>
 
-                {/* Divider */}
+                {/* =========================
+                    DIVIDER
+                ========================= */}
 
                 <Divider
                     orientation="vertical"
@@ -173,7 +190,9 @@ export const AppHeader: React.FC = () => {
                     }}
                 />
 
-                {/* User */}
+                {/* =========================
+                    USER
+                ========================= */}
 
                 <Dropdown
                     menu={{ items }}
@@ -215,7 +234,9 @@ export const AppHeader: React.FC = () => {
                             }}
                         />
 
-                        {/* User information */}
+                        {/* =========================
+                            USER INFORMATION
+                        ========================= */}
 
                         <div
                             style={{
@@ -245,6 +266,8 @@ export const AppHeader: React.FC = () => {
                                 {userRole}
                             </Text>
                         </div>
+
+                        {/* Arrow */}
 
                         <DownOutlined
                             style={{

@@ -10,7 +10,8 @@ import {
     MenuFoldOutlined,
     MenuUnfoldOutlined,
     IdcardOutlined,
-    CalculatorFilled,
+    TagsFilled,
+    AccountBookFilled,
 } from '@ant-design/icons';
 
 import { useRouter, usePathname } from 'next/navigation';
@@ -80,10 +81,22 @@ export const AppSidebar: React.FC = () => {
                     title={collapsed ? 'Loại nghỉ phép' : ''}
                     placement="right"
                 >
-                    <CalculatorFilled />
+                    <TagsFilled />
                 </Tooltip>
             ),
             label: 'Loại nghỉ phép',
+        },
+        {
+            key: APP_ROUTES.LEAVEBALANCES,
+            icon: (
+                <Tooltip
+                    title={collapsed ? 'Số dư phép' : ''}
+                    placement="right"
+                >
+                    <AccountBookFilled />
+                </Tooltip>
+            ),
+            label: 'Số dư phép',
         },
     ];
 
