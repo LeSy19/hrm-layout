@@ -1,4 +1,10 @@
 export const EndPoint = {
+    Dashboard: {
+        GetSummaryMetrics: "/dashboard/summary",
+        GetDepartmentCounts: "/dashboard/department-counts",
+        GetEmployeeLeaveToday: "/dashboard/on-leave-today",
+        GetMonthlyLeaveStatus: "dashboard/monthly-leave-status",
+    },
     Employees: {
         GetAllEmployees: "/employees",
         GetEmployeeById: (id: number) => `/employees/${id}`,

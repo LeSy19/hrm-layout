@@ -461,7 +461,11 @@ export const LeaveBalanceGrid: React.FC<LeaveBalanceGridProps> = ({
         {
             key: 'my-balance',
 
-            label: 'Quỹ phép của tôi',
+            label: (
+                <span style={{ fontSize: 16, fontWeight: 500 }}>
+                    Quỹ phép của tôi
+                </span>
+            ),
 
             children: (
                 <div
@@ -502,7 +506,11 @@ export const LeaveBalanceGrid: React.FC<LeaveBalanceGridProps> = ({
         tabItems.push({
             key: 'all-balances',
 
-            label: 'Quản lý quỹ phép toàn công ty',
+            label: (
+                <span style={{ fontSize: 16, fontWeight: 500 }}>
+                    Quản lý quỹ phép toàn công ty
+                </span>
+            ),
 
             children: (
                 <div

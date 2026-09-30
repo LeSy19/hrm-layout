@@ -38,7 +38,7 @@ export default function LeaveBalancePage() {
     return (
         <MainLayout>
             <div style={{ padding: '24px', background: '#f5f5f5', minHeight: '100vh' }}>
-                <h2 style={{ marginBottom: 20 }}>Quản Lý Số Dư Phép (Leave Balance)</h2>
+                <h1 className="text-xl mb-3 font-bold text-gray-800">Quản Lý Số Dư Phép (Leave Balance)</h1>
 
                 {/* 1. Header bao gồm Tìm kiếm, Lọc năm & Nút chức năng Phân quyền */}
                 <LeaveBalanceHeader

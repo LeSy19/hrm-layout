@@ -1,109 +1,78 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { Row, Col, Card, Statistic, Spin } from 'antd';
-import { TeamOutlined, ApartmentOutlined, CalendarOutlined } from '@ant-design/icons';
+import React, { useState, useEffect, useCallback } from 'react';
 import MainLayout from '@/app/layouts/MainLayout';
-import { formatDateVN } from '@/utils/day.util';
-import { APP_ROUTES } from '@/constants/routes';
-import { useRouter, usePathname } from 'next/navigation';
-import { authService } from '@/service/auth.service';
-
-interface UserInfo {
-    username: string;
-    email: string;
-    roleName: string;
-}
+import { SummaryCards } from './components/SummaryCards';
+import { DashboardService } from '@/service/dashboard.service';
+import {
+    DashboardSummaryDto,
+    DepartmentEmployeeCountDto,
+    EmployeeOnLeaveTodayDto,
+    MonthlyLeaveStatusDto,
+} from '@/interfaces/dashboard.interface';
+import { Button, message, Space } from 'antd';
+import { ReloadOutlined } from '@ant-design/icons';
+import { EmployeesOnLeaveTable } from '@/app/pages/dashboard/components/EmployeesOnLeaveTable';
+import { DashboardCharts } from '@/app/pages/dashboard/components/DashboardCharts';
 
 export default function DashboardPage() {
-    const router = useRouter();
-    const pathname = usePathname();
-    const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState<boolean>(true);
+    const [summary, setSummary] = useState<DashboardSummaryDto | null>(null);
+    const [deptStatus, setDeptStatus] = useState<DepartmentEmployeeCountDto[]>([]);
+    const [employeesOnLeave, setEmployeesOnLeave] = useState<EmployeeOnLeaveTodayDto[]>([]);
+    const [leaveStatus, setLeaveStatus] = useState<MonthlyLeaveStatusDto | null>(null);
 
-    // State quản lý Menu đang chọn (mặc định lấy theo pathname hoặc APP_ROUTES.DASHBOARD)
-    const [selectedKey, setSelectedKey] = useState<string>(pathname || APP_ROUTES.DASHBOARD);
+    const fetchDashboardData = useCallback(async () => {
+        setLoading(true);
+        try {
+            const [summaryRes,
+                deptRes,
+                leaveTodayRes,
+                leaveStatusRes
+            ] = await Promise.all([
+                DashboardService.getSummary(),
+                DashboardService.getDepartmentCounts(),
+                DashboardService.getEmployeesOnLeaveToday(),
+                DashboardService.getMonthlyLeaveStatus(),
+            ]);
+
+            setSummary(summaryRes);
+            setDeptStatus(deptRes);
+            setEmployeesOnLeave(leaveTodayRes);
+            setLeaveStatus(leaveStatusRes);
+        } catch (error: any) {
+            message.error(error?.response?.data?.message || 'Lỗi khi tải dữ liệu Dashboard');
+        } finally {
+            setLoading(false);
+        }
+    }, []);
 
     useEffect(() => {
-        // Kiểm tra xác thực (Authentication Check)
-        const token = localStorage.getItem('access_token');
-        const storedUser = localStorage.getItem('user_info');
-
-        if (!token) {
-            router.push('/auth/login');
-            return;
-        }
-
-        if (storedUser) {
-            try {
-                setUserInfo(JSON.parse(storedUser));
-            } catch (e) {
-                console.error('Lỗi parse user_info', e);
-            }
-        }
-
-        setLoading(false);
-    }, [router]);
-
-    // Đồng bộ menu active mỗi khi URL thay đổi
-    useEffect(() => {
-        if (pathname) {
-            setSelectedKey(pathname);
-        }
-    }, [pathname]);
-
-    // Xử lý Đăng xuất
-    const handleLogout = () => {
-        authService.logout();
-        router.push('/auth/login');
-    };
-
-    if (loading) {
-        return (
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-                <Spin size="large" description="Đang tải dữ liệu Dashboard..." />
-            </div>
-        );
-    }
-
+        fetchDashboardData();
+    }, [fetchDashboardData]);
 
     return (
         <MainLayout>
+            <div style={{ padding: '24px', background: '#f0f2f5', minHeight: '100vh' }}>
+                {/* Header Dashboard */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+                    <h2 style={{ margin: 0 }}>Tổng Quan Nhân Sự (Dashboard)</h2>
+                    <Button icon={<ReloadOutlined />} onClick={fetchDashboardData} loading={loading}>
+                        Tải Lại Dữ Liệu
+                    </Button>
+                </div>
 
-            <>
-                {/* Thẻ Thống kê tổng quan */}
-                <Row gutter={[16, 16]}>
-                    <Col xs={24} sm={12} lg={6}>
-                        <Card style={{ borderRadius: 8 }}>
-                            <Statistic title="Tổng nhân sự" value={128} prefix={<TeamOutlined style={{ color: '#1677ff' }} />} />
-                        </Card>
-                    </Col>
-                    <Col xs={24} sm={12} lg={6}>
-                        <Card style={{ borderRadius: 8 }}>
-                            <Statistic title="Phòng ban" value={8} prefix={<ApartmentOutlined style={{ color: '#52c41a' }} />} />
-                        </Card>
-                    </Col>
-                    <Col xs={24} sm={12} lg={6}>
-                        <Card style={{ borderRadius: 8 }}>
-                            <Statistic title="Đơn phép chờ duyệt" value={5} prefix={<CalendarOutlined style={{ color: '#faad14' }} />} />
-                        </Card>
-                    </Col>
-                    <Col xs={24} sm={12} lg={6}>
-                        <Card style={{ borderRadius: 8 }}>
-                            <Statistic title="Múi giờ hệ thống" value="UTC+7 (VN)" />
-                        </Card>
-                    </Col>
-                </Row>
+                {/* 1. Chỉ số tổng quan */}
+                <SummaryCards summary={summary} loading={loading} />
 
-                {/* Khối Thông tin chi tiết */}
-                <Card title="Thông tin phiên đăng nhập hiện tại" style={{ marginTop: 24, borderRadius: 8 }}>
-                    <p><strong>Tài khoản:</strong> {userInfo?.username}</p>
-                    <p><strong>Email:</strong> {userInfo?.email}</p>
-                    <p><strong>Vai trò (Role):</strong> {userInfo?.roleName}</p>
-                    <p><strong>Thời gian truy cập:</strong> {formatDateVN(new Date())}</p>
-                </Card>
-            </>
+                {/* 2. Biểu đồ thống kê phòng ban & Đơn nghỉ phép */}
+                <DashboardCharts departmentStats={deptStatus} leaveStats={leaveStatus} loading={loading} />
 
+                {/* 3. Bảng danh sách nhân viên nghỉ phép hôm nay */}
+                <div style={{ marginTop: 16 }}>
+                    <EmployeesOnLeaveTable data={employeesOnLeave} loading={loading} />
+                </div>
+            </div>
         </MainLayout>
     );
 }
