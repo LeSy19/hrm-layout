@@ -2,13 +2,14 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { message } from 'antd';
+import { App } from 'antd';
 import { authService, LoginFormValues } from '@/service/auth.service';
 import { APP_ROUTES } from '@/constants/routes';
 
 export function useAuth() {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
+    const { message } = App.useApp();
 
     const login = async (values: LoginFormValues) => {
         setLoading(true);

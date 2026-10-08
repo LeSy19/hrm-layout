@@ -3,7 +3,7 @@ export const EndPoint = {
         GetSummaryMetrics: "/dashboard/summary",
         GetDepartmentCounts: "/dashboard/department-counts",
         GetEmployeeLeaveToday: "/dashboard/on-leave-today",
-        GetMonthlyLeaveStatus: "dashboard/monthly-leave-status",
+        GetMonthlyLeaveStatus: "/dashboard/monthly-leave-status",
     },
     Employees: {
         GetAllEmployees: "/employees",
@@ -31,15 +31,36 @@ export const EndPoint = {
         GetMyBalance: "/leavebalances/my-balance",
         GetAllBalances: "/leavebalances",
         AssignLeaveBalance: "/leavebalances/assign",
-        BulkAssignLeaveBalance: "leavebalances/bulk-assign",
+        BulkAssignLeaveBalance: "/leavebalances/bulk-assign",
 
     },
-    LeaveRequests: "/leaverequests",
     LeaveTypes: {
         GetAllLeaveTypes: "/leavetypes",
         GetLeaveTypeById: (id: number) => `/leavetypes/${id}`,
         createLeaveType: "/leavetypes",
         updateLeaveType: (id: number) => `/leavetypes/${id}`,
         deleteLeaveType: (id: number) => `/leavetypes/${id}`,
+    },
+    LeaveRequests: {
+        GetMyLeaveRequests: "/leaverequests/my-requests",
+        GetPendingLeaveRequests: "/leaverequests/request-pending",
+        GetAllLeaveRequests: "/leaverequests",
+        GetUnpaidLeaveSummary: "/leaverequests/unpaid-summary",
+        CreateLeaveRequest: "/leaverequests",
+        ProcessLeaveRequest: (id: number) => `/leaverequests/${id}/process`,
+        CancelLeaveRequest: (id: number) => `/leaverequests/${id}/cancel`,
+    },
+    // Quản lý phân quyền (chỉ ADMIN)
+    RolePermissions: {
+        GetRoles: "/rolepermission/roles",
+        GetAllPermissions: "/rolepermission/permissions",
+        GetPermissionsByRole: (roleId: number) => `/rolepermission/roles/${roleId}/permissions`,
+        UpdateRolePermissions: (roleId: number) => `/rolepermission/roles/${roleId}/permissions`,
+        UpdatePermissionInfo: (id: number) => `/rolepermission/permissions/${id}`,
+        SyncEndpoints: "/rolepermission/sync",
+    },
+    Auth: {
+        GetMyPermissions: "/auth/me/permissions",
     }
+
 } as const

@@ -6,5 +6,10 @@ export const APP_ROUTES = {
     EMPLOYEES: '/pages/employees',
     JOBTITLES: '/pages/jobtitles',
     LEAVETYPES: '/pages/leavetypes',
-    LEAVEBALANCES: '/pages/leavebalances'
+    LEAVEBALANCES: '/pages/leavebalances',
+    LEAVEREQUESTS: '/pages/leaverequests',
+    MY_REQUEST: '/pages/leaverequests/my-requests',
+    PENDING_REQUEST: '/pages/leaverequests/requests-pending',
+    UNPAID_SUMMARY: '/pages/leaverequests/unpaid-summary',
+    PERMISSIONS: '/pages/permissions',
 };
